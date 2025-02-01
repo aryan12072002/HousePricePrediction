@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Prediction</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/3.11.2/modernizr.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>House Price Prediction</h2>
+
+        <form action="/predict" method="post" id="predictionForm">
+            <div class="input-group">
+                <label for="MedInc">Median Income:</label>
+                <input type="number" id="MedInc" name="MedInc" required step="any" placeholder="Enter Median Income" oninput="validateInput(this)">
+                <small class="error-message" id="MedIncError"></small>
+            </div>
+
+            <div class="input-group">
+                <label for="HouseAge">House Age:</label>
+                <input type="number" id="HouseAge" name="HouseAge" required step="any" placeholder="Enter House Age" oninput="validateInput(this)">
+                <small class="error-message" id="HouseAgeError"></small>
+            </div>
+
+            <div class="input-group">
+                <label for="AveRooms">Average Rooms:</label>
+                <input type="number" id="AveRooms" name="AveRooms" required step="any" placeholder="Enter Average Rooms" oninput="validateInput(this)">
+                <small class="error-message" id="AveRoomsError"></small>
+            </div>
+
+            <div class="input-group">
+                <label for="AveOccup">Average Occupants:</label>
+                <input type="number" id="AveOccup" name="AveOccup" required step="any" placeholder="Enter Average Occupants" oninput="validateInput(this)">
+                <small class="error-message" id="AveOccupError"></small>
+            </div>
+
+            <button type="submit" id="predictBtn">Predict</button>
+        </form>
+
+        <div id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Processing your request...</p>
+        </div>
+
+        {% if prediction_text %}
+            <div class="prediction">
+                <h3>Predicted Price: {{ prediction_text }}</h3>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Function for real-time validation
+        function validateInput(inputElement) {
+            const errorElement = document.getElementById(inputElement.id + 'Error');
+            if (isNaN(inputElement.value) || inputElement.value.trim() === '') {
+                errorElement.textContent = 'Please enter a valid number.';
+                inputElement.classList.add('invalid');
+            } else {
+                errorElement.textContent = '';
+                inputElement.classList.remove('invalid');
+            }
+        }
+
+        // Handling form submission and showing loading spinner
+        const form = document.getElementById('predictionForm');
+        const loadingDiv = document.getElementById('loading');
+        const predictBtn = document.getElementById('predictBtn');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            loadingDiv.style.display = 'block';
+            predictBtn.disabled = true;
+
+            // Simulating a delay to represent the prediction processing
+            setTimeout(() => {
+                form.submit();
+            }, 2000); // simulate 2 seconds delay
+        });
+    </script>
+</body>
+</html>
+
+
+
